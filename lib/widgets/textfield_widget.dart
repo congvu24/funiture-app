@@ -19,26 +19,38 @@ class TextFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: TextFormField(
-        controller: textController,
-        focusNode: focusNode,
-        onFieldSubmitted: onFieldSubmitted,
-        onChanged: onChanged,
-        autofocus: autoFocus,
-        textInputAction: inputAction,
-        obscureText: this.isObscure,
-        maxLength: 25,
-        keyboardType: this.inputType,
-        style: Theme.of(context).textTheme.body1,
-        decoration: InputDecoration(
-            hintText: this.hint,
-            hintStyle:
-                Theme.of(context).textTheme.body1!.copyWith(color: hintColor),
-            errorText: errorText,
-            counterText: '',
-            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white),
+        child: Padding(
+          padding: padding,
+          child: TextFormField(
+            controller: textController,
+            focusNode: focusNode,
+            onFieldSubmitted: onFieldSubmitted,
+            onChanged: onChanged,
+            autofocus: autoFocus,
+            textInputAction: inputAction,
+            obscureText: this.isObscure,
+            maxLength: 25,
+            keyboardType: this.inputType,
+            style: Theme.of(context).textTheme.bodyText1,
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(0),
+                hintText: this.hint,
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: hintColor),
+                counterText: '',
+                icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+          ),
+        ),
       ),
     );
   }
@@ -61,5 +73,4 @@ class TextFieldWidget extends StatelessWidget {
     this.autoFocus = false,
     this.inputAction,
   }) : super(key: key);
-
 }

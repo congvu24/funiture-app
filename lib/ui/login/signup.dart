@@ -17,12 +17,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignupScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       primary: true,
       resizeToAvoidBottomInset: false,
-      appBar: EmptyAppBar(),
+      // appBar: EmptyAppBar(),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -70,6 +70,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Color(0xff303030),
               ),
             ),
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 10,
+              left: 10,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.chevron_left,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -81,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 70),
+                  SizedBox(height: 60),
                   Container(
                     child: Image.asset("assets/images/logo.png"),
                   ),
@@ -89,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 60,
                   ),
                   Text(
-                    "Tài khoản",
+                    "Đăng ký",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -100,7 +114,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 30,
                   ),
                   TextFieldWidget(
-                      icon: Icons.mail,
+                      icon: Icons.email,
+                      errorText: "Không hợp lệ",
+                      hint: "Mật khẩu",
+                      textController: _passwordController),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  TextFieldWidget(
+                      icon: Icons.person,
                       errorText: "Không hợp lệ",
                       hint: "Username",
                       textController: _userEmailController),
@@ -115,23 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: 60,
                   ),
-                  MyButton(
-                      callback: () {
-                        Navigator.of(context).pushNamed(Routes.home);
-                      },
-                      text: "Đăng nhập"),
-                  SizedBox(height: 10),
-                  Container(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(Routes.signup);
-                        },
-                        child: Text(
-                          "Chưa có tài khoản? Đăng kí ngay",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )),
+                  MyButton(callback: () {}, text: "Đăng ký"),
                   SizedBox(
                     height: 30,
                   ),

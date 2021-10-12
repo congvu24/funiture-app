@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
             theme: _themeStore.darkMode ? themeDataDark : themeData,
             routes: Routes.routes,
             locale: Locale(_languageStore.locale),
+            initialRoute: Routes.splash,
             supportedLocales: _languageStore.supportedLanguages
                 .map((language) => Locale(language.locale!, language.code))
                 .toList(),
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
+            // home: _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
           );
         },
       ),
