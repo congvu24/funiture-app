@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/di/components/service_locator.dart';
+import 'package:boilerplate/stores/cart/cart_store.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
   final PostStore _postStore = PostStore(getIt<Repository>());
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
+  final CartStore _cartStore = CartStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,8 @@ class MyApp extends StatelessWidget {
         Provider<ThemeStore>(create: (_) => _themeStore),
         Provider<PostStore>(create: (_) => _postStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
+        Provider<CartStore>(create: (_) => _cartStore),
+        Provider<UserStore>(create: (_) => _userStore),
       ],
       child: Observer(
         name: 'global-observer',

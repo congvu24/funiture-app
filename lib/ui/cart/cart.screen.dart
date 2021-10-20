@@ -1,11 +1,30 @@
+import 'package:boilerplate/stores/cart/cart_store.dart';
+import 'package:boilerplate/ui/cart/payment.screen.dart';
+import 'package:boilerplate/ui/home/home.page.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/widgets/body_scaffold.widget.dart';
 import 'package:boilerplate/widgets/listview_cart.widget.dart';
 import 'package:boilerplate/widgets/my_button.widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  late CartStore _cartStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cartStore = Provider.of<CartStore>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,49 +84,57 @@ class CartScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                height: 150,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        offset: Offset(0, -1),
-                        blurRadius: 10)
-                  ],
+            Observer(builder: (context) {
+              if (_cartStore.data.length == 0) return Container();
+              return Positioned(
+                bottom: 0,
+                left: 0,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  height: 150,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          offset: Offset(0, -1),
+                          blurRadius: 10)
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Tạm tính:",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            "đ" + moneyFormater.format(_cartStore.submoney),
+                            style: TextStyle(fontSize: 16),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      MyButton(
+                          callback: () {
+                            pushNewScreenWithRouteSettings(
+                              context,
+                              settings: RouteSettings(name: Routes.payment),
+                              screen: PaymentScreen(),
+                              withNavBar: false,
+                            );
+                          },
+                          text: "Đặt hàng")
+                    ],
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Tạm tính:",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          "200.000VND",
-                          style: TextStyle(fontSize: 16),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    MyButton(
-                        callback: () {
-                          Navigator.of(context).pushNamed(Routes.payment);
-                        },
-                        text: "Đặt hàng")
-                  ],
-                ),
-              ),
-            )
+              );
+            })
           ],
         ),
       ),

@@ -46,10 +46,40 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  final _$wishlistAtom = Atom(name: '_UserStore.wishlist');
+
+  @override
+  ObservableList<Product> get wishlist {
+    _$wishlistAtom.reportRead();
+    return super.wishlist;
+  }
+
+  @override
+  set wishlist(ObservableList<Product> value) {
+    _$wishlistAtom.reportWrite(value, super.wishlist, () {
+      super.wishlist = value;
+    });
+  }
+
+  final _$profileAtom = Atom(name: '_UserStore.profile');
+
+  @override
+  Profile get profile {
+    _$profileAtom.reportRead();
+    return super.profile;
+  }
+
+  @override
+  set profile(Profile value) {
+    _$profileAtom.reportWrite(value, super.profile, () {
+      super.profile = value;
+    });
+  }
+
   final _$loginAsyncAction = AsyncAction('_UserStore.login');
 
   @override
-  Future<dynamic> login(String email, String password) {
+  Future<bool> login(String email, String password) {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
@@ -58,6 +88,8 @@ mixin _$UserStore on _UserStore, Store {
     return '''
 success: ${success},
 loginFuture: ${loginFuture},
+wishlist: ${wishlist},
+profile: ${profile},
 isLoading: ${isLoading}
     ''';
   }

@@ -29,9 +29,10 @@ class _SplashScreenState extends State<SplashScreen> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: Image.asset(
-              "assets/images/bg-login.png",
-              fit: BoxFit.fill,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/bg-login.png"),
+                  fit: BoxFit.cover),
             ),
           ),
           Opacity(
@@ -50,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 SizedBox(height: 150),
                 Container(
-                  child: Image.asset("assets/images/logo.png"),
+                  child: Image.asset("assets/images/logo.png", width: 150),
                 ),
                 Spacer(),
                 Text(

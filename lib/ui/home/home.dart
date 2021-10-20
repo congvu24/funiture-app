@@ -10,6 +10,7 @@ import 'package:boilerplate/ui/cart/success.screen.dart';
 import 'package:boilerplate/ui/chat/chat.screen.dart';
 import 'package:boilerplate/ui/home/home.page.dart';
 import 'package:boilerplate/ui/profile/profile.screen.dart';
+import 'package:boilerplate/ui/wishlist/wishlist.screen.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -23,6 +24,7 @@ import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -81,9 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Container(
         color: Colors.blue,
       ),
-      Container(
-        color: Colors.black,
-      ),
+      Wishlist(),
       Profile(),
     ];
   }
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
-        title: ("Home"),
+        title: ("Trang chủ"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
@@ -103,7 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
             Routes.address: (context) => AddressScreen(),
             Routes.confirm: (context) => ConfirmScreen(),
             Routes.success: (context) => SuccessScreen(),
-            Routes.item: (context) => ItemScreen(),
             Routes.editAddress: (context) => EditAddressScreen(),
             // '/second': (context) => MainScreen3(),
           },
@@ -111,25 +110,24 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.shopping_cart),
-        title: ("Cart"),
+        title: ("Giỏ hàng"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.notifications_none_rounded),
-        title: ("Notification"),
+        icon: SvgPicture.asset("assets/images/scan.svg"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.bookmark_outline),
-        title: ("Wishlist"),
+        title: ("Theo dõi"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.person_outline_rounded),
-        title: ("Account"),
+        title: ("Tài khoản"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
         routeAndNavigatorSettings: RouteAndNavigatorSettings(

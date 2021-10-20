@@ -1,11 +1,38 @@
+import 'package:boilerplate/models/product/Product.model.dart';
+import 'package:boilerplate/stores/cart/cart_store.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/ui/home/home.page.dart';
+import 'package:boilerplate/utils/flushbar/show_flushbar.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
-import 'package:boilerplate/widgets/body_scaffold.widget.dart';
-import 'package:boilerplate/widgets/listview_cart.widget.dart';
 import 'package:boilerplate/widgets/my_button.widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
-class ItemScreen extends StatelessWidget {
-  const ItemScreen({Key? key}) : super(key: key);
+class ItemScreen extends StatefulWidget {
+  final Product product;
+  const ItemScreen({Key? key, required this.product}) : super(key: key);
+
+  @override
+  State<ItemScreen> createState() => _ItemScreenState();
+}
+
+class _ItemScreenState extends State<ItemScreen> {
+  late CartStore _cartStore;
+  late UserStore _userStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cartStore = Provider.of<CartStore>(context);
+    _userStore = Provider.of<UserStore>(context);
+  }
+
+  void _handleAddToCart(BuildContext context) {
+    _cartStore.addCart(widget.product);
+    showFlushBar(
+        context, Theme.of(context).primaryColor, "Đã thêm vào giỏ hàng!");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +44,10 @@ class ItemScreen extends StatelessWidget {
         child: Stack(children: [
           Padding(
             padding: EdgeInsets.only(
-                bottom: 20,
+                // bottom: 20,
                 right: 20,
                 left: 20,
-                top: MediaQuery.of(context).padding.top + 10),
+                top: 0),
             child: Stack(
               children: [
                 SingleChildScrollView(
@@ -37,6 +64,9 @@ class ItemScreen extends StatelessWidget {
                                 Navigator.of(context).pop();
                               },
                               child: Container(
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).padding.top +
+                                        10),
                                 padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                     borderRadius:
@@ -48,15 +78,73 @@ class ItemScreen extends StatelessWidget {
                                 child: Icon(Icons.chevron_left),
                               ),
                             ),
-                            InkWell(
-                              child: Container(
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
+                            Row(
+                              children: [
+                                Observer(builder: (context) {
+                                  return Container(
+                                    margin: EdgeInsets.only(
+                                        top:
+                                            MediaQuery.of(context).padding.top +
+                                                10),
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (_userStore.checkInWishlist(
+                                                widget.product) ==
+                                            false) {
+                                          _userStore
+                                              .addWishlist(widget.product);
+                                          showFlushBar(
+                                              context,
+                                              Theme.of(context).primaryColor,
+                                              "Đã thêm vào theo dõi");
+                                        } else {
+                                          _userStore.removeFromWishlist(
+                                              widget.product);
+                                          showFlushBar(
+                                              context,
+                                              Theme.of(context).primaryColor,
+                                              "Đã xoá khỏi theo dõi");
+                                        }
+                                      },
+                                      child: Icon(
+                                        _userStore
+                                                .checkInWishlist(widget.product)
+                                            ? Icons.bookmark_added_rounded
+                                            : Icons.bookmark_add_outlined,
+                                        color: _userStore
+                                                .checkInWishlist(widget.product)
+                                            ? Theme.of(context).primaryColor
+                                            : Theme.of(context).canvasColor,
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                SizedBox(
+                                  width: 20,
                                 ),
-                                child: Icon(Icons.notifications_none_rounded),
-                              ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: MediaQuery.of(context).padding.top +
+                                          10),
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .pushNamed(Routes.cart);
+                                    },
+                                    child: Icon(Icons.shopping_cart_outlined),
+                                  ),
+                                )
+                              ],
                             )
                           ],
                         ),
@@ -69,22 +157,28 @@ class ItemScreen extends StatelessWidget {
                           alignment: Alignment.center,
                           child: Stack(
                             children: [
-                              Positioned.fill(
-                                child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Image.asset(
-                                      "assets/images/3d-scroll.png",
-                                      fit: BoxFit.contain,
-                                      width: 300,
-                                    )),
-                              ),
+                              // Positioned.fill(
+                              //   child: Align(
+                              //       alignment: Alignment.bottomCenter,
+                              //       child: Image.asset(
+                              //         "assets/images/3d-scroll.png",
+                              //         fit: BoxFit.contain,
+                              //         width: 300,
+                              //       )),
+                              // ),
                               Container(
                                 height: 250,
                                 width: double.infinity,
-                                child: Image.asset(
-                                  "assets/images/product-1.png",
-                                  // fit: BoxFit.contain,
-                                  height: 100,
+                                child: PageView(
+                                  children: <Widget>[
+                                    ...widget.product.images
+                                        .map((item) => Container(
+                                              color: Colors.red,
+                                              child: Image.asset(item,
+                                                  fit: BoxFit.fitWidth),
+                                            ))
+                                        .toList()
+                                  ],
                                 ),
                               ),
                               Positioned.fill(
@@ -135,11 +229,18 @@ class ItemScreen extends StatelessWidget {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Nina Soft Chair ",
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.w600),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Text(
+                                widget.product.name,
+                                maxLines: 10,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.w600),
+                              ),
                             ),
                             Row(
                               children: [
@@ -148,7 +249,7 @@ class ItemScreen extends StatelessWidget {
                                   color: Colors.yellow,
                                 ),
                                 Text(
-                                  "4.5",
+                                  widget.product.star.toString(),
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600),
@@ -162,7 +263,9 @@ class ItemScreen extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text("400.000 VND",
+                            Text(
+                                "đ" +
+                                    moneyFormater.format(widget.product.price),
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -173,7 +276,7 @@ class ItemScreen extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          "The fabric chairs with curved backs make you want to stay at the dining table longer. Choose...See more fabric chairs with curved backs make you want to stay at the dining table longer. Choose...See more",
+                          widget.product.description,
                           style: TextStyle(
                               fontSize: 16,
                               color: Theme.of(context)
@@ -183,9 +286,15 @@ class ItemScreen extends StatelessWidget {
                         SizedBox(
                           height: 20,
                         ),
-                        buildSectionItem(context, "Thương hiệu:", "Việt Tiệp"),
-                        buildSectionItem(context, "Xuất xứ:", "Việt Nam"),
-                        buildSectionItem(context, "Nguyên liệu:", "Gỗ"),
+                        if (widget.product.brand != null)
+                          buildSectionItem(
+                              context, "Thương hiệu:", widget.product.brand),
+                        if (widget.product.country != null)
+                          buildSectionItem(
+                              context, "Xuất xứ:", widget.product.country),
+                        if (widget.product.material != null)
+                          buildSectionItem(
+                              context, "Nguyên liệu:", widget.product.material),
                         buildSectionItem(context, "Kích thước:", null),
                         SizedBox(
                           height: 20,
@@ -201,76 +310,104 @@ class ItemScreen extends StatelessWidget {
                                   BorderRadius.all(Radius.circular(20))),
                           child: Column(
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Dài:",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .secondaryHeaderColor
-                                              .withOpacity(0.8))),
-                                  Text("2.0m",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .secondaryHeaderColor
-                                              .withOpacity(0.4)))
-                                ],
-                              ),
+                              if (widget.product.length != null)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Dài:",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor
+                                                .withOpacity(0.8))),
+                                    Text(widget.product.length.toString() + "m",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor
+                                                .withOpacity(0.4)))
+                                  ],
+                                ),
                               Divider(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Rộng:",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .secondaryHeaderColor
-                                              .withOpacity(0.8))),
-                                  Text("2.0m",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .secondaryHeaderColor
-                                              .withOpacity(0.4)))
-                                ],
-                              ),
+                              if (widget.product.width != null)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Rộng:",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor
+                                                .withOpacity(0.8))),
+                                    Text(widget.product.width.toString() + "m",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor
+                                                .withOpacity(0.4)))
+                                  ],
+                                ),
                               Divider(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Sâu:",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .secondaryHeaderColor
-                                              .withOpacity(0.8))),
-                                  Text("2.0m",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .secondaryHeaderColor
-                                              .withOpacity(0.4)))
-                                ],
-                              ),
+                              if (widget.product.height != null)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Cao:",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor
+                                                .withOpacity(0.8))),
+                                    Text(widget.product.height.toString() + "m",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor
+                                                .withOpacity(0.4)))
+                                  ],
+                                ),
                               Divider(),
+                              if (widget.product.width != null)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Sâu:",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor
+                                                .withOpacity(0.8))),
+                                    Text(widget.product.deep.toString() + "m",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor
+                                                .withOpacity(0.4)))
+                                  ],
+                                ),
                             ],
                           ),
                         ),
                         SizedBox(
                           height: 30,
                         ),
-                        MyButton(callback: () {}, text: "Thêm vào giỏ hàng")
+                        MyButton(
+                            callback: () {
+                              _handleAddToCart(context);
+                            },
+                            text: "Thêm vào giỏ hàng")
                       ],
                     ),
                   ),

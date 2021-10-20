@@ -1,3 +1,5 @@
+import 'package:boilerplate/models/product/Product.model.dart';
+import 'package:boilerplate/models/profile/profile.model.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:mobx/mobx.dart';
 
@@ -5,6 +7,14 @@ import '../../data/repository.dart';
 import '../form/form_store.dart';
 
 part 'user_store.g.dart';
+
+Profile defaultProfile = new Profile(
+    name: "Công Vũ",
+    phone: "012213321",
+    address: "Xuân Lộc, Đồng Nai",
+    email: "19521110@gm.uit.edu.vn",
+    username: "1",
+    password: "1");
 
 class UserStore = _UserStore with _$UserStore;
 
@@ -23,7 +33,6 @@ abstract class _UserStore with Store {
 
   // constructor:---------------------------------------------------------------
   _UserStore(Repository repository) : this._repository = repository {
-
     // setting up disposers
     _setupDisposers();
 
@@ -44,7 +53,7 @@ abstract class _UserStore with Store {
 
   // empty responses:-----------------------------------------------------------
   static ObservableFuture<bool> emptyLoginResponse =
-  ObservableFuture.value(false);
+      ObservableFuture.value(false);
 
   // store variables:-----------------------------------------------------------
   @observable
@@ -56,31 +65,41 @@ abstract class _UserStore with Store {
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
+  @observable
+  ObservableList<Product> wishlist = new ObservableList<Product>();
+
+  @observable
+  Profile profile = defaultProfile;
+
   // actions:-------------------------------------------------------------------
   @action
-  Future login(String email, String password) async {
-
-    final future = _repository.login(email, password);
-    loginFuture = ObservableFuture(future);
-    await future.then((value) async {
-      if (value) {
-        _repository.saveIsLoggedIn(true);
-        this.isLoggedIn = true;
-        this.success = true;
-      } else {
-        print('failed to login');
-      }
-    }).catchError((e) {
-      print(e);
-      this.isLoggedIn = false;
-      this.success = false;
-      throw e;
-    });
+  Future<bool> login(String email, String password) async {
+    if (email == defaultProfile.username &&
+        password == defaultProfile.password) {
+      _repository.saveIsLoggedIn(true);
+      this.isLoggedIn = true;
+      this.success = true;
+      return true;
+    } else
+      return false;
   }
 
   logout() {
     this.isLoggedIn = false;
     _repository.saveIsLoggedIn(false);
+  }
+
+  addWishlist(Product product) {
+    if (wishlist.indexWhere((element) => product.id == element.id) == -1)
+      wishlist.add(product);
+  }
+
+  removeFromWishlist(Product product) {
+    wishlist.removeWhere((element) => product.id == element.id);
+  }
+
+  bool checkInWishlist(Product product) {
+    return wishlist.indexWhere((element) => product.id == element.id) >= 0;
   }
 
   // general methods:-----------------------------------------------------------

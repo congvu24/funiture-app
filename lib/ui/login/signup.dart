@@ -95,9 +95,9 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 60),
+                  SizedBox(height: 20),
                   Container(
-                    child: Image.asset("assets/images/logo.png"),
+                    child: Image.asset("assets/images/logo.png", width: 100),
                   ),
                   SizedBox(
                     height: 60,

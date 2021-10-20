@@ -1,6 +1,8 @@
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/utils/flushbar/show_flushbar.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -29,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //stores:---------------------------------------------------------------------
   late ThemeStore _themeStore;
+  late UserStore _userStore;
 
   //focus node:-----------------------------------------------------------------
   late FocusNode _passwordFocusNode;
@@ -46,6 +49,24 @@ class _LoginScreenState extends State<LoginScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _themeStore = Provider.of<ThemeStore>(context);
+    _userStore = Provider.of<UserStore>(context);
+  }
+
+  _handleLogin() async {
+    String username = _userEmailController.text;
+    String password = _passwordController.text;
+
+    if (username == "" || password == "") {
+      showFlushBar(context, Colors.red, "Thông tin đăng nhập không đúng");
+    } else {
+      bool isLogin = await _userStore.login(username, password);
+      if (isLogin) {
+        Navigator.of(context).pushReplacementNamed(Routes.home);
+        // showFlushBar(
+        //     context, Theme.of(context).primaryColor, "Đăng nhập thành công!");
+      } else
+        showFlushBar(context, Colors.red, "Thông tin đăng nhập không đúng");
+    }
   }
 
   @override
@@ -81,9 +102,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 70),
+                  SizedBox(height: 20),
                   Container(
-                    child: Image.asset("assets/images/logo.png"),
+                    child: Image.asset("assets/images/logo.png", width: 100),
                   ),
                   SizedBox(
                     height: 60,
@@ -117,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   MyButton(
                       callback: () {
-                        Navigator.of(context).pushNamed(Routes.home);
+                        _handleLogin();
                       },
                       text: "Đăng nhập"),
                   SizedBox(height: 10),

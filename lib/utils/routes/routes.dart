@@ -2,7 +2,6 @@ import 'package:boilerplate/ui/cart/address.screen.dart';
 import 'package:boilerplate/ui/cart/cart.screen.dart';
 import 'package:boilerplate/ui/cart/confirm.screen.dart';
 import 'package:boilerplate/ui/cart/edit_address.screen.dart';
-import 'package:boilerplate/ui/cart/item.screen.dart';
 import 'package:boilerplate/ui/cart/payment.screen.dart';
 import 'package:boilerplate/ui/cart/success.screen.dart';
 import 'package:boilerplate/ui/cart/tracking.screen.dart';
@@ -11,6 +10,7 @@ import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/ui/login/signup.dart';
 import 'package:boilerplate/ui/splash/splash.dart';
+import 'package:boilerplate/ui/wishlist/wishlist.screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
@@ -30,6 +30,7 @@ class Routes {
   static const String chat = '/chat';
   static const String tracking = '/tracking';
   static const String editAddress = '/editAddress';
+  static const String wishlist = '/wishlist';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -41,9 +42,9 @@ class Routes {
     address: (BuildContext context) => AddressScreen(),
     confirm: (BuildContext context) => ConfirmScreen(),
     success: (BuildContext context) => SuccessScreen(),
-    item: (BuildContext context) => ItemScreen(),
     chat: (BuildContext context) => ChatScreen(),
     tracking: (BuildContext context) => TrackingScreen(),
     editAddress: (BuildContext context) => EditAddressScreen(),
+    wishlist: (BuildContext context) => Wishlist(),
   };
 }

@@ -2,12 +2,22 @@ import 'package:boilerplate/ui/cart/tracking.screen.dart';
 import 'package:boilerplate/ui/chat/chat.screen.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/widgets/body_scaffold.widget.dart';
+import 'package:boilerplate/widgets/modal/feedback_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  _showFeedback() async {
+    await showDialog(context: context, builder: (context) => FeedbackModal());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +101,9 @@ class Profile extends StatelessWidget {
           children: [
             buildAccountInfoItem("assets/images/profile.svg", "Địa chỉ", () {}),
             buildAccountInfoItem("assets/images/card.svg", "Thanh toán", () {}),
-            buildAccountInfoItem(
-                "assets/images/feedback.svg", "Feedback", () {}),
+            buildAccountInfoItem("assets/images/feedback.svg", "Feedback", () {
+              _showFeedback();
+            }),
             buildAccountInfoItem("assets/images/chat.svg", "Tin nhắn", () {
               // Navigator.of(context).pushNamed(Routes.chat);
               pushNewScreenWithRouteSettings(

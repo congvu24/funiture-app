@@ -1,3 +1,5 @@
+import 'package:boilerplate/stores/cart/cart_store.dart';
+import 'package:boilerplate/ui/home/home.page.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/widgets/body_scaffold.widget.dart';
 import 'package:boilerplate/widgets/listview_address.widget.dart';
@@ -6,108 +8,63 @@ import 'package:boilerplate/widgets/listview_payment.widget.dart';
 import 'package:boilerplate/widgets/my_button.widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
-class AddressScreen extends StatelessWidget {
+class Address {
+  final int id;
+  final String name;
+  final String phone;
+  final String address;
+  String? city;
+  String? postcode;
+  String? country;
+
+  Address(
+      {required this.id,
+      required this.name,
+      required this.phone,
+      required this.address,
+      this.city,
+      this.postcode,
+      this.country});
+}
+
+List<Address> addresses = [
+  new Address(
+      id: 1,
+      name: "Dương Công Vũ",
+      phone: "09121331",
+      address: "Hoàng Diệu 2, Linh Trung, Thủ Đức, TPHCM"),
+  new Address(
+      id: 2,
+      name: "Nguyễn Dương Thục Anh",
+      phone: "099912228",
+      address: "Hoàng Hoa Thám, Gia Ray, Xuân Lộc, Đồng Nai"),
+];
+
+class AddressScreen extends StatefulWidget {
   const AddressScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AddressScreen> createState() => _AddressScreenState();
+}
+
+class _AddressScreenState extends State<AddressScreen> {
+  late CartStore _cartStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cartStore = Provider.of<CartStore>(context);
+  }
 
   void showBottomModal(context) {
     showModalBottomSheet<void>(
         context: context,
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
-          return Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Container(
-              height: 300,
-              child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                body: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: Container(
-                      // width: double.infinity,
-                      height: double.infinity,
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text('Đơn vị vận chuyển'),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Theme.of(context).primaryColor),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Giao hàng tiết kiệm",
-                                      style: TextStyle(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ),
-                                    Text(
-                                      "30k",
-                                      style: TextStyle(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Theme.of(context).canvasColor),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Giao hàng nhanh",
-                                      style: TextStyle(
-                                          color: Theme.of(context).canvasColor),
-                                    ),
-                                    Text(
-                                      "15k",
-                                      style: TextStyle(
-                                          color: Theme.of(context).canvasColor),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
+          return ShippingMethodSelect();
         });
   }
 
@@ -205,26 +162,28 @@ class AddressScreen extends StatelessWidget {
                       },
                       child: DottedBorder(
                         padding: EdgeInsets.all(10),
-                        color: Theme.of(context).canvasColor,
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Đối tác giao hàng:",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context).canvasColor),
-                              ),
-                              Text(
-                                "GHTK",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context).canvasColor),
-                              )
-                            ],
-                          ),
-                        ),
+                        color: Theme.of(context).primaryColor,
+                        child: Observer(builder: (context) {
+                          return Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Đối tác giao hàng:",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                Text(
+                                  _cartStore.shippingMethod.shortName,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(context).primaryColor),
+                                )
+                              ],
+                            ),
+                          );
+                        }),
                       ),
                     ),
                     SizedBox(
@@ -240,6 +199,125 @@ class AddressScreen extends StatelessWidget {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ShippingMethod {
+  final String name;
+  final double fee;
+  final String shortName;
+
+  ShippingMethod(this.name, this.fee, this.shortName);
+}
+
+List<ShippingMethod> shippingMethods = [
+  new ShippingMethod("Giao hàng tiết kiệm", 10000, "GHTK"),
+  new ShippingMethod("Giao hàng nhanh", 20000, "GHN"),
+];
+
+class ShippingMethodSelect extends StatefulWidget {
+  const ShippingMethodSelect({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ShippingMethodSelect> createState() => _ShippingMethodSelectState();
+}
+
+class _ShippingMethodSelectState extends State<ShippingMethodSelect> {
+  late CartStore _cartStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cartStore = Provider.of<CartStore>(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: MediaQuery.of(context).viewInsets,
+      child: Container(
+        height: 300,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Center(
+              child: Container(
+                // width: double.infinity,
+                height: double.infinity,
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Đơn vị vận chuyển'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      children: [
+                        ...shippingMethods.map((item) {
+                          return Observer(builder: (context) {
+                            bool isActive = item.shortName ==
+                                _cartStore.shippingMethod.shortName;
+                            return InkWell(
+                              onTap: () {
+                                _cartStore.setShipping(item);
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: isActive
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).canvasColor),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      item.name,
+                                      style: TextStyle(
+                                          color: isActive
+                                              ? Theme.of(context).primaryColor
+                                              : Theme.of(context).canvasColor),
+                                    ),
+                                    Text(
+                                      "đ" + moneyFormater.format(item.fee),
+                                      style: TextStyle(
+                                          color: isActive
+                                              ? Theme.of(context).primaryColor
+                                              : Theme.of(context).canvasColor),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                        }).toList(),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

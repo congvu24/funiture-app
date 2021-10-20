@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "name": "san pham 1 san pham 1 san pham 1 san pham 1 san pham 1",
+    "price": 200000.0,
+    "star": 4.5,
+    "description": "The fabric chairs with curved backs make you want to stay at the dining table longer. Choose...See more fabric chairs with curved backs make you want to stay at the dining table longer. Choose...See more",
+    "room": "Phòng khách",
+    "category": "Ghế",
+    "brand": "Hoà Phát",
+    "country": "Việt Nam",
+    "material": "Thép",
+    "width": 20.0,
+    "length": 20.0,
+    "deep": 20.0,
+    "height": 10.0,
+    "images": ["assets/product/1-53/1.1.jpeg", "assets/product/1-53/1.2.jpeg"]
+  },
+  {
+    "id": 2,
+    "name": "san pham 1 san pham 1 san pham 1 san pham 1 san pham 1",
+    "price": 200000.0,
+    "star": 4.5,
+    "description": "The fabric chairs with curved backs make you want to stay at the dining table longer. Choose...See more fabric chairs with curved backs make you want to stay at the dining table longer. Choose...See more",
+    "room": "Phòng khách",
+    "category": "Ghế",
+    "brand": "Hoà Phát",
+    "country": "Việt Nam",
+    "material": "Thép",
+    "width": 20.0,
+    "length": 20.0,
+    "deep": 20.0,
+    "height": 10.0,
+    "images": ["assets/product/1-53/2.1.jpeg", "assets/product/1-53/2.2.jpeg"]
+  },
+  {
+    "id": 3,
+    "name": "san pham 1 san pham 1 san pham 1 san pham 1 san pham 1",
+    "price": 200000.0,
+    "star": 4.5,
+    "description": "The fabric chairs with curved backs make you want to stay at the dining table longer. Choose...See more fabric chairs with curved backs make you want to stay at the dining table longer. Choose...See more",
+    "room": "Phòng khách",
+    "category": "Ghế",
+    "brand": "Hoà Phát",
+    "country": "Việt Nam",
+    "material": "Thép",
+    "width": 20.0,
+    "length": 20.0,
+    "deep": 20.0,
+    "height": 10.0,
+    "images": ["assets/product/1-53/2.3.jpeg", "assets/product/1-53/2.jpeg"]
+  }
+]
