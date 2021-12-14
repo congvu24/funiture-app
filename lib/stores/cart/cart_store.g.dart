@@ -149,6 +149,17 @@ mixin _$CartStore on _CartStore, Store {
   }
 
   @override
+  void clearCart() {
+    final _$actionInfo =
+        _$_CartStoreActionController.startAction(name: '_CartStore.clearCart');
+    try {
+      return super.clearCart();
+    } finally {
+      _$_CartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 voucher: ${voucher},

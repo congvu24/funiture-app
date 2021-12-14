@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/ui/ar/ar_options.screen.dart';
 import 'package:boilerplate/ui/cart/address.screen.dart';
 import 'package:boilerplate/ui/cart/cart.screen.dart';
 import 'package:boilerplate/ui/cart/confirm.screen.dart';
@@ -10,6 +11,8 @@ import 'package:boilerplate/ui/cart/success.screen.dart';
 import 'package:boilerplate/ui/chat/chat.screen.dart';
 import 'package:boilerplate/ui/home/home.page.dart';
 import 'package:boilerplate/ui/profile/profile.screen.dart';
+import 'package:boilerplate/ui/service/design.screen.dart';
+import 'package:boilerplate/ui/service/manufactory.screen.dart';
 import 'package:boilerplate/ui/wishlist/wishlist.screen.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
@@ -49,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Theme.of(context).primaryColor, // Default is Colors.white.
       handleAndroidBackButtonPress: true, // Default is true.
       resizeToAvoidBottomInset:
-          true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+          false, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
       stateManagement: true, // Default is true.
       hideNavigationBarWhenKeyboardShows:
           true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
@@ -80,9 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       Home(),
       CartScreen(),
-      Container(
-        color: Colors.blue,
-      ),
+      ArOption(),
+      // Container(),
       Wishlist(),
       Profile(),
     ];
@@ -104,6 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Routes.confirm: (context) => ConfirmScreen(),
             Routes.success: (context) => SuccessScreen(),
             Routes.editAddress: (context) => EditAddressScreen(),
+            Routes.design: (context) => DesignScreen(),
+            Routes.manufactory: (context) => ManufactoryScreen(),
+            Routes.ar: (context) => ArOption(),
             // '/second': (context) => MainScreen3(),
           },
         ),
@@ -120,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
         inactiveColorPrimary: Colors.white,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.bookmark_outline),
+        icon: Icon(Icons.favorite_border),
         title: ("Theo dõi"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,

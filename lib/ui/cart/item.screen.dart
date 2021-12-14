@@ -29,9 +29,36 @@ class _ItemScreenState extends State<ItemScreen> {
   }
 
   void _handleAddToCart(BuildContext context) {
+    // if (_userStore.isLoggedIn == false)
+    //   Navigator.of(context, rootNavigator: true)
+    //       .pushReplacementNamed(Routes.login);
+    // else {
     _cartStore.addCart(widget.product);
     showFlushBar(
         context, Theme.of(context).primaryColor, "Đã thêm vào giỏ hàng!");
+    // }
+  }
+
+  void _handleByNow(BuildContext context) {
+    _cartStore.addCart(widget.product);
+    Navigator.of(context).pushNamed(Routes.cart);
+  }
+
+  void _handleWishlist(BuildContext context) {
+    if (_userStore.isLoggedIn == false)
+      Navigator.of(context, rootNavigator: true)
+          .pushReplacementNamed(Routes.login);
+    else {
+      if (_userStore.checkInWishlist(widget.product) == false) {
+        _userStore.addWishlist(widget.product);
+        showFlushBar(
+            context, Theme.of(context).primaryColor, "Đã thêm vào theo dõi");
+      } else {
+        _userStore.removeFromWishlist(widget.product);
+        showFlushBar(
+            context, Theme.of(context).primaryColor, "Đã xoá khỏi theo dõi");
+      }
+    }
   }
 
   @override
@@ -45,12 +72,13 @@ class _ItemScreenState extends State<ItemScreen> {
           Padding(
             padding: EdgeInsets.only(
                 // bottom: 20,
-                right: 20,
-                left: 20,
+                right: 10,
+                left: 10,
                 top: 0),
             child: Stack(
               children: [
                 SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     child: Column(
@@ -65,8 +93,7 @@ class _ItemScreenState extends State<ItemScreen> {
                               },
                               child: Container(
                                 margin: EdgeInsets.only(
-                                    top: MediaQuery.of(context).padding.top +
-                                        10),
+                                    top: MediaQuery.of(context).padding.top),
                                 padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                     borderRadius:
@@ -93,29 +120,13 @@ class _ItemScreenState extends State<ItemScreen> {
                                     ),
                                     child: InkWell(
                                       onTap: () {
-                                        if (_userStore.checkInWishlist(
-                                                widget.product) ==
-                                            false) {
-                                          _userStore
-                                              .addWishlist(widget.product);
-                                          showFlushBar(
-                                              context,
-                                              Theme.of(context).primaryColor,
-                                              "Đã thêm vào theo dõi");
-                                        } else {
-                                          _userStore.removeFromWishlist(
-                                              widget.product);
-                                          showFlushBar(
-                                              context,
-                                              Theme.of(context).primaryColor,
-                                              "Đã xoá khỏi theo dõi");
-                                        }
+                                        _handleWishlist(context);
                                       },
                                       child: Icon(
                                         _userStore
                                                 .checkInWishlist(widget.product)
-                                            ? Icons.bookmark_added_rounded
-                                            : Icons.bookmark_add_outlined,
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
                                         color: _userStore
                                                 .checkInWishlist(widget.product)
                                             ? Theme.of(context).primaryColor
@@ -173,9 +184,8 @@ class _ItemScreenState extends State<ItemScreen> {
                                   children: <Widget>[
                                     ...widget.product.images
                                         .map((item) => Container(
-                                              color: Colors.red,
                                               child: Image.asset(item,
-                                                  fit: BoxFit.fitWidth),
+                                                  fit: BoxFit.contain),
                                             ))
                                         .toList()
                                   ],
@@ -192,7 +202,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                           width: 20,
                                           height: 20,
                                           decoration: BoxDecoration(
-                                              color: Colors.blue,
+                                              color: Colors.grey,
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20))),
                                         ),
@@ -203,7 +213,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                           width: 20,
                                           height: 20,
                                           decoration: BoxDecoration(
-                                              color: Colors.red,
+                                              color: Colors.black,
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20))),
                                         ),
@@ -214,7 +224,8 @@ class _ItemScreenState extends State<ItemScreen> {
                                           width: 20,
                                           height: 20,
                                           decoration: BoxDecoration(
-                                              color: Colors.pink,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20))),
                                         )
@@ -263,9 +274,7 @@ class _ItemScreenState extends State<ItemScreen> {
                         ),
                         Row(
                           children: [
-                            Text(
-                                "đ" +
-                                    moneyFormater.format(widget.product.price),
+                            Text(moneyFormater.format(widget.product.price),
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -322,7 +331,8 @@ class _ItemScreenState extends State<ItemScreen> {
                                             color: Theme.of(context)
                                                 .secondaryHeaderColor
                                                 .withOpacity(0.8))),
-                                    Text(widget.product.length.toString() + "m",
+                                    Text(
+                                        widget.product.length.toString() + "cm",
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -344,7 +354,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                             color: Theme.of(context)
                                                 .secondaryHeaderColor
                                                 .withOpacity(0.8))),
-                                    Text(widget.product.width.toString() + "m",
+                                    Text(widget.product.width.toString() + "cm",
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -366,7 +376,8 @@ class _ItemScreenState extends State<ItemScreen> {
                                             color: Theme.of(context)
                                                 .secondaryHeaderColor
                                                 .withOpacity(0.8))),
-                                    Text(widget.product.height.toString() + "m",
+                                    Text(
+                                        widget.product.height.toString() + "cm",
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -376,7 +387,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                   ],
                                 ),
                               Divider(),
-                              if (widget.product.width != null)
+                              if (widget.product.deep != null)
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -388,7 +399,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                             color: Theme.of(context)
                                                 .secondaryHeaderColor
                                                 .withOpacity(0.8))),
-                                    Text(widget.product.deep.toString() + "m",
+                                    Text(widget.product.deep.toString() + "cm",
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -403,11 +414,56 @@ class _ItemScreenState extends State<ItemScreen> {
                         SizedBox(
                           height: 30,
                         ),
-                        MyButton(
-                            callback: () {
-                              _handleAddToCart(context);
-                            },
-                            text: "Thêm vào giỏ hàng")
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  _handleAddToCart(context);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 16, horizontal: 16),
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                  child: Icon(Icons.add_shopping_cart_outlined,
+                                      color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    _handleByNow(context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 16, horizontal: 40),
+                                    decoration: BoxDecoration(
+                                        color: Theme.of(context).primaryColor,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Text(
+                                      "Mua ngay",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -435,7 +491,7 @@ class _ItemScreenState extends State<ItemScreen> {
             Text(
               textRight,
               style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: Theme.of(context).canvasColor.withOpacity(1)),
             )

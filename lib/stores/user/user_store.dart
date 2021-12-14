@@ -9,12 +9,12 @@ import '../form/form_store.dart';
 part 'user_store.g.dart';
 
 Profile defaultProfile = new Profile(
-    name: "Công Vũ",
-    phone: "012213321",
-    address: "Xuân Lộc, Đồng Nai",
-    email: "19521110@gm.uit.edu.vn",
-    username: "1",
-    password: "1");
+    name: "Thanh Thảo",
+    phone: "0349424977",
+    address: "Gò Vấp, TP.HCM",
+    email: "dinhthao0112@gmail.com",
+    username: "dinhthao0112",
+    password: "thao0112");
 
 class UserStore = _UserStore with _$UserStore;
 
@@ -74,8 +74,11 @@ abstract class _UserStore with Store {
   // actions:-------------------------------------------------------------------
   @action
   Future<bool> login(String email, String password) async {
-    if (email == defaultProfile.username &&
-        password == defaultProfile.password) {
+    print(email);
+    print(password);
+    print(defaultProfile.email);
+    print(defaultProfile.password);
+    if (email == defaultProfile.email && password == defaultProfile.password) {
       _repository.saveIsLoggedIn(true);
       this.isLoggedIn = true;
       this.success = true;

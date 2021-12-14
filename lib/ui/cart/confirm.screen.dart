@@ -129,10 +129,8 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                       item.product.name +
                                           " x" +
                                           item.number.toString(),
-                                      "đ" +
-                                          moneyFormater.format(
-                                              item.product.price *
-                                                  item.number));
+                                      moneyFormater.format(
+                                          item.product.price * item.number));
                                 }).toList()
                               ],
                             ),
@@ -201,9 +199,8 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                             ),
                             buildSectionItem(
                                 _cartStore.shippingMethod.name,
-                                "đ" +
-                                    moneyFormater
-                                        .format(_cartStore.shippingMethod.fee)),
+                                moneyFormater
+                                    .format(_cartStore.shippingMethod.fee)),
                             SizedBox(
                               height: 20,
                             ),
@@ -285,12 +282,11 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                 fontSize: 18, fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            "đ" +
-                                moneyFormater.format(_cartStore.submoney +
-                                    _cartStore.shippingMethod.fee -
-                                    (_cartStore.submoney +
-                                            _cartStore.shippingMethod.fee) *
-                                        (_cartStore.voucher?.discount ?? 0)),
+                            moneyFormater.format(_cartStore.submoney +
+                                _cartStore.shippingMethod.fee -
+                                (_cartStore.submoney +
+                                        _cartStore.shippingMethod.fee) *
+                                    (_cartStore.voucher?.discount ?? 0)),
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w600),
                           )
@@ -304,6 +300,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                             Navigator.popUntil(
                                 context, ModalRoute.withName("/home"));
                             Navigator.of(context).pushNamed(Routes.success);
+                            _cartStore.clearCart();
                           },
                           text: "Đặt hàng")
                     ],
@@ -325,7 +322,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              width: 300,
+              width: 200,
               child: Text(
                 textLeft,
                 overflow: TextOverflow.ellipsis,

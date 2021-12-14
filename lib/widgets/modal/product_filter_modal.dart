@@ -1,7 +1,17 @@
 import 'package:boilerplate/widgets/my_button.widget.dart';
 import 'package:flutter/material.dart';
 
-List<String> ProductCategory = ["Bàn", "Tủ", "Giường", "Kệ", "Ghế", "Khác"];
+List<String> ProductCategory = [
+  "Tủ Quần áo",
+  "Kệ tủ TV",
+  "Sofa",
+  "Kệ đựng đồ",
+  "Giường",
+  "Tủ giày",
+  "Tủ đầu giường",
+  "Bàn trang điểm",
+  "Khác"
+];
 
 class ProductFilterModal extends StatefulWidget {
   final List<String> defaultFitler;

@@ -1,3 +1,4 @@
+import 'package:boilerplate/utils/flushbar/show_flushbar.dart';
 import 'package:boilerplate/widgets/my_button.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,34 +13,23 @@ class FeedbackModal extends StatefulWidget {
 }
 
 class _FeedbackModalState extends State<FeedbackModal> {
-  Color getColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return Colors.blue;
-    }
-    return Theme.of(context).primaryColor;
-  }
-
-  Set<String> selected = new Set<String>();
+  int rate = 5;
 
   @override
   void initState() {
     super.initState();
   }
 
-  _handleToggle(String value) {
-    if (selected.contains(value))
-      setState(() {
-        selected.remove(value);
-      });
-    else
-      setState(() {
-        selected.add(value);
-      });
+  _handleSubmit() {
+    Navigator.of(context).pop();
+    showFlushBar(
+        context, Theme.of(context).primaryColor, "Cảm ơn bạn đã góp ý!");
+  }
+
+  _handlePick(int value) {
+    setState(() {
+      rate = value;
+    });
   }
 
   @override
@@ -72,60 +62,100 @@ class _FeedbackModalState extends State<FeedbackModal> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            child: Icon(Icons.star,
-                                size: 40, color: Theme.of(context).canvasColor),
-                          ),
-                          Text("Chưa tốt", style: TextStyle(fontSize: 12))
-                        ],
+                      InkWell(
+                        onTap: () {
+                          _handlePick(1);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              child: Icon(Icons.star,
+                                  size: 40,
+                                  color: 1 <= rate
+                                      ? Colors.yellow
+                                      : Theme.of(context).canvasColor),
+                            ),
+                            Text("Chưa tốt", style: TextStyle(fontSize: 12))
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            child: Icon(Icons.star,
-                                size: 40, color: Theme.of(context).canvasColor),
-                          ),
-                          Text("Tạm ổn", style: TextStyle(fontSize: 12))
-                        ],
+                      InkWell(
+                        onTap: () {
+                          _handlePick(2);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              child: Icon(Icons.star,
+                                  size: 40,
+                                  color: 2 <= rate
+                                      ? Colors.yellow
+                                      : Theme.of(context).canvasColor),
+                            ),
+                            Text("Tạm ổn", style: TextStyle(fontSize: 12))
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            child: Icon(Icons.star,
-                                size: 40, color: Theme.of(context).canvasColor),
-                          ),
-                          Text("Bình thường", style: TextStyle(fontSize: 12))
-                        ],
+                      InkWell(
+                        onTap: () {
+                          _handlePick(3);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              child: Icon(Icons.star,
+                                  size: 40,
+                                  color: 3 <= rate
+                                      ? Colors.yellow
+                                      : Theme.of(context).canvasColor),
+                            ),
+                            Text("Bình thường", style: TextStyle(fontSize: 12))
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            child: Icon(Icons.star,
-                                size: 40, color: Theme.of(context).canvasColor),
-                          ),
-                          Text("Tốt", style: TextStyle(fontSize: 12))
-                        ],
+                      InkWell(
+                        onTap: () {
+                          _handlePick(4);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              child: Icon(Icons.star,
+                                  size: 40,
+                                  color: 4 <= rate
+                                      ? Colors.yellow
+                                      : Theme.of(context).canvasColor),
+                            ),
+                            Text("Tốt", style: TextStyle(fontSize: 12))
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            child: Icon(Icons.star,
-                                size: 40, color: Theme.of(context).canvasColor),
-                          ),
-                          Text("Tuyệt vời", style: TextStyle(fontSize: 12))
-                        ],
+                      InkWell(
+                        onTap: () {
+                          _handlePick(5);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              child: Icon(Icons.star,
+                                  size: 40,
+                                  color: 5 <= rate
+                                      ? Colors.yellow
+                                      : Theme.of(context).canvasColor),
+                            ),
+                            Text("Tuyệt vời", style: TextStyle(fontSize: 12))
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -136,6 +166,7 @@ class _FeedbackModalState extends State<FeedbackModal> {
                     "Chi tiết:",
                     style: TextStyle(fontSize: 16),
                   ),
+                  SizedBox(height: 10),
                   TextField(
                     maxLines: 7,
                     style: TextStyle(fontSize: 14.0),
@@ -166,7 +197,7 @@ class _FeedbackModalState extends State<FeedbackModal> {
                   alignment: Alignment.bottomCenter,
                   child: InkWell(
                       onTap: () {
-                        Navigator.of(context).pop(selected.toList());
+                        _handleSubmit();
                       },
                       child: Container(
                         width: 50,
@@ -185,32 +216,6 @@ class _FeedbackModalState extends State<FeedbackModal> {
           ]),
         ),
       ],
-    );
-  }
-
-  Widget buildItem(String text, bool isCheck) {
-    return InkWell(
-      onTap: () {
-        _handleToggle(text);
-      },
-      child: Container(
-        // margin: EdgeInsets.symmetric(vertical: 5),
-        child: Row(
-          children: [
-            Checkbox(
-              checkColor: Colors.white,
-              fillColor: MaterialStateProperty.resolveWith(getColor),
-              value: isCheck,
-              onChanged: (bool? value) {
-                _handleToggle(text);
-              },
-            ),
-            Text(
-              text,
-            )
-          ],
-        ),
-      ),
     );
   }
 }

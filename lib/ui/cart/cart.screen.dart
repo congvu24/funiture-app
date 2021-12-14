@@ -1,4 +1,5 @@
 import 'package:boilerplate/stores/cart/cart_store.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/cart/payment.screen.dart';
 import 'package:boilerplate/ui/home/home.page.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
@@ -19,11 +20,13 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   late CartStore _cartStore;
+  late UserStore _userStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _cartStore = Provider.of<CartStore>(context);
+    _userStore = Provider.of<UserStore>(context);
   }
 
   @override
@@ -65,16 +68,16 @@ class _CartScreenState extends State<CartScreen> {
                                 child: Icon(Icons.chevron_left),
                               ),
                             ),
-                            InkWell(
-                              child: Container(
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                ),
-                                child: Icon(Icons.notifications_none_rounded),
-                              ),
-                            )
+                            // InkWell(
+                            //   child: Container(
+                            //     padding: EdgeInsets.all(5),
+                            //     decoration: BoxDecoration(
+                            //       borderRadius:
+                            //           BorderRadius.all(Radius.circular(10)),
+                            //     ),
+                            //     child: Icon(Icons.notifications_none_rounded),
+                            //   ),
+                            // )
                           ],
                         ),
                         ListviewCart()
@@ -112,7 +115,7 @@ class _CartScreenState extends State<CartScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                           Text(
-                            "đ" + moneyFormater.format(_cartStore.submoney),
+                            moneyFormater.format(_cartStore.submoney),
                             style: TextStyle(fontSize: 16),
                           )
                         ],
@@ -122,12 +125,17 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       MyButton(
                           callback: () {
-                            pushNewScreenWithRouteSettings(
-                              context,
-                              settings: RouteSettings(name: Routes.payment),
-                              screen: PaymentScreen(),
-                              withNavBar: false,
-                            );
+                            if (_userStore.isLoggedIn == false)
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushReplacementNamed(Routes.login);
+                            else {
+                              pushNewScreenWithRouteSettings(
+                                context,
+                                settings: RouteSettings(name: Routes.payment),
+                                screen: PaymentScreen(),
+                                withNavBar: false,
+                              );
+                            }
                           },
                           text: "Đặt hàng")
                     ],

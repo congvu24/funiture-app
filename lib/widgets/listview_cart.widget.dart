@@ -114,6 +114,7 @@ class _ListviewCartState extends State<ListviewCart> {
                   Container(
                     width: 100,
                     height: 150,
+                    margin: EdgeInsets.only(right: 10),
                     child: Image.asset(item.product.images[0]),
                   ),
                   Column(
@@ -133,10 +134,7 @@ class _ListviewCartState extends State<ListviewCart> {
                           height: 10,
                         ),
                         Text(
-                          "đ" +
-                              moneyFormater
-                                  .format(item.product.price)
-                                  .toString(),
+                          moneyFormater.format(item.product.price).toString(),
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.w500),

@@ -1,4 +1,5 @@
 import 'package:boilerplate/stores/cart/cart_store.dart';
+import 'package:boilerplate/widgets/modal/select_ewallet_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -11,11 +12,11 @@ class PaymentMethod {
 }
 
 List<PaymentMethod> payments = [
-  new PaymentMethod("Ví Momo", "assets/images/momo.png"),
   new PaymentMethod("Thẻ Visa", "assets/images/visa.png"),
-  new PaymentMethod("Thẻ ATM", "assets/images/atm.png"),
+  new PaymentMethod("Ví điện tử", "assets/images/e-wallet.png"),
+  new PaymentMethod("Thẻ ATM/Internet Banking", "assets/images/atm.png"),
   new PaymentMethod("Trả góp", "assets/images/installment.png"),
-  new PaymentMethod("Tiền mặt", "assets/images/money.png")
+  new PaymentMethod("Ship COD/POS", "assets/images/money.png")
 ];
 
 class ListviewPayment extends StatefulWidget {
@@ -32,6 +33,21 @@ class _ListviewPaymentState extends State<ListviewPayment> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _cartStore = Provider.of<CartStore>(context);
+  }
+
+  _handleSelectWallet() async {
+    await showModalBottomSheet(
+        context: context,
+        useRootNavigator: true,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return Provider(
+            create: (context) => _cartStore,
+            child: SelectEWalletModal(),
+          );
+        });
+    _cartStore.setPayment(payments[1]);
   }
 
   Widget build(BuildContext context) {
@@ -63,7 +79,10 @@ class _ListviewPaymentState extends State<ListviewPayment> {
       bool isActive = item.name == _cartStore.paymentMethod.name;
       return InkWell(
         onTap: () {
-          _cartStore.setPayment(item);
+          if (item.name != "Ví điện tử")
+            _cartStore.setPayment(item);
+          else
+            _handleSelectWallet();
         },
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -96,7 +115,7 @@ class _ListviewPaymentState extends State<ListviewPayment> {
                             color: isActive
                                 ? Theme.of(context).primaryColor
                                 : Theme.of(context).canvasColor,
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w500),
                       ),
                     ],

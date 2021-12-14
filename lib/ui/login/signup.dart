@@ -116,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   TextFieldWidget(
                       icon: Icons.email,
                       errorText: "Không hợp lệ",
-                      hint: "Mật khẩu",
+                      hint: "Email",
                       textController: _passwordController),
                   SizedBox(
                     height: 30,
@@ -124,7 +124,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   TextFieldWidget(
                       icon: Icons.person,
                       errorText: "Không hợp lệ",
-                      hint: "Username",
+                      hint: "Tên đăng nhập",
                       textController: _userEmailController),
                   SizedBox(
                     height: 30,

@@ -2,16 +2,42 @@ import 'package:boilerplate/data/local/datasources/product/product_datasource.da
 import 'package:boilerplate/di/components/service_locator.dart';
 import 'package:boilerplate/models/product/Product.model.dart';
 import 'package:boilerplate/ui/cart/item.screen.dart';
+import 'package:boilerplate/ui/service/design.screen.dart';
+import 'package:boilerplate/ui/service/manufactory.screen.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/widgets/body_scaffold.widget.dart';
 import 'package:boilerplate/widgets/listview_ads.widget.dart';
 import 'package:boilerplate/widgets/listview_room.widget.dart';
+import 'package:boilerplate/widgets/modal/filter_bottom_modal.dart';
 import 'package:boilerplate/widgets/modal/product_filter_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'dart:math';
 
-final moneyFormater = NumberFormat.decimalPattern();
+Random random = new Random();
+
+// final moneyFormater = NumberFormat.decimalPattern();
+final moneyFormater = NumberFormat.simpleCurrency(locale: "vi_Vi", name: "VND");
+
+shuffle(List<Product> array) {
+  int currentIndex = array.length;
+  int randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    randomIndex = random.nextInt(currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    Product temp = array[randomIndex];
+    array[randomIndex] = array[currentIndex];
+    array[currentIndex] = temp;
+  }
+
+  return array;
+}
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -32,23 +58,34 @@ class _HomeState extends State<Home> {
     currentData = data;
   }
 
-  void _openFilter() async {
-    List<String> result = await showDialog(
-        context: context,
-        builder: (context) =>
-            ProductFilterModal(defaultFitler: filterCategory));
-    if (result.length > 0)
+  _handleFilterChange(value) {
+    if (filterCategory.contains(value))
       setState(() {
-        currentData =
-            data.where((element) => result.contains(element.category)).toList();
-        filterCategory = result;
+        filterCategory.remove(value);
       });
     else
       setState(() {
-        currentData = data;
-        filterCategory = [];
+        filterCategory.add(value);
       });
   }
+
+  // void _openFilter() async {
+  //   List<String> result = await showDialog(
+  //       context: context,
+  //       builder: (context) =>
+  //           ProductFilterModal(defaultFitler: filterCategory));
+  //   if (result.length > 0)
+  //     setState(() {
+  //       currentData =
+  //           data.where((element) => result.contains(element.category)).toList();
+  //       filterCategory = result;
+  //     });
+  //   else
+  //     setState(() {
+  //       currentData = data;
+  //       filterCategory = [];
+  //     });
+  // }
 
   void handleFilterRoom(String value) {
     setState(() {
@@ -66,6 +103,31 @@ class _HomeState extends State<Home> {
       });
   }
 
+  void _openFilter(context) async {
+    await showModalBottomSheet(
+        context: context,
+        useRootNavigator: true,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return FilterBottomModal(
+              defaultFitler: filterCategory, cb: _handleFilterChange);
+        });
+
+    if (filterCategory.length > 0)
+      setState(() {
+        currentData = data
+            .where((element) => filterCategory.contains(element.category))
+            .toList();
+        if (currentData.length == 0) currentData = data;
+      });
+    else
+      setState(() {
+        currentData = data;
+        filterCategory = [];
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BodyScaffold(
@@ -74,7 +136,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Explore\nModern furniture",
+              "Khám phá\nNội thất mới",
               style: TextStyle(
                   color: Theme.of(context).secondaryHeaderColor,
                   fontSize: 24,
@@ -101,9 +163,83 @@ class _HomeState extends State<Home> {
           ],
         ),
         SizedBox(
-          height: 30,
+          height: 20,
         ),
         ListAdsView(),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: Routes.design),
+                    screen: DesignScreen(),
+                    withNavBar: false,
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  height: 70,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/design.jpg"),
+                        colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(0.4), BlendMode.srcOver),
+                        fit: BoxFit.cover),
+                  ),
+                  child: Text(
+                    "Thiết kế bản vẽ",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: Routes.manufactory),
+                    screen: ManufactoryScreen(),
+                    withNavBar: false,
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  height: 70,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/manufactory.jpg"),
+                        colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(0.4), BlendMode.srcOver),
+                        fit: BoxFit.cover),
+                  ),
+                  child: Text(
+                    "Gia công nội thất",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
         SizedBox(
           height: 30,
         ),
@@ -115,7 +251,7 @@ class _HomeState extends State<Home> {
         ),
         InkWell(
           onTap: () {
-            _openFilter();
+            _openFilter(context);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -136,9 +272,56 @@ class _HomeState extends State<Home> {
         SizedBox(
           height: 20,
         ),
-        ProductList(
-          data: currentData,
-        )
+        if (filterRoom == "Tất cả")
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  "Sản phẩm bán chạy:",
+                  style: TextStyle(
+                      color: Theme.of(context).secondaryHeaderColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              ProductList(data: data.sublist(0, 4)),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  "Danh mục:",
+                  style: TextStyle(
+                      color: Theme.of(context).secondaryHeaderColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              ProductList(
+                data: currentData,
+              ),
+              ProductList(
+                data: currentData,
+              ),
+              ProductList(
+                data: currentData,
+              ),
+              ProductList(
+                data: currentData,
+              ),
+              ProductList(
+                data: currentData,
+              )
+            ],
+          )
+        else
+          Column(
+            children: [
+              ProductList(
+                data: currentData,
+              ),
+            ],
+          )
       ],
     );
   }
@@ -151,13 +334,14 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Product> shuffled = shuffle(data);
     List<Widget> widgets = [];
 
-    for (int i = 0; i < data.length; i = i + 2) {
-      if (i + 1 < data.length) {
-        widgets.add(buildRow(data[i], data[i + 1]));
+    for (int i = 0; i < shuffled.length; i = i + 2) {
+      if (i + 1 < shuffled.length) {
+        widgets.add(buildRow(shuffled[i], shuffled[i + 1]));
       } else {
-        widgets.add(buildRow(data[i], null));
+        widgets.add(buildRow(shuffled[i], null));
       }
     }
     if (widgets.length > 0) return Column(children: [...widgets]);
@@ -196,6 +380,8 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int randomNumber = random.nextInt(1);
+
     return InkWell(
       onTap: () {
         pushNewScreenWithRouteSettings(
@@ -224,7 +410,8 @@ class ProductItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                child: Image.asset(item.images[0], fit: BoxFit.fill)),
+                child:
+                    Image.asset(item.images[randomNumber], fit: BoxFit.fill)),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -256,7 +443,7 @@ class ProductItem extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            "đ" + moneyFormater.format(item.price),
+                            moneyFormater.format(item.price),
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Theme.of(context).primaryColor),

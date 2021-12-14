@@ -255,7 +255,7 @@ class ProductItem extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            "đ" + moneyFormater.format(item.price),
+                            moneyFormater.format(item.price),
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Theme.of(context).primaryColor),

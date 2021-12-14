@@ -105,6 +105,11 @@ abstract class _CartStore with Store {
     voucher = newVoucher;
   }
 
+  @action
+  void clearCart() {
+    data = new ObservableList<ProductInCart>();
+  }
+
   // general methods:-----------------------------------------------------------
   void dispose() {
     for (final d in _disposers) {

@@ -63,7 +63,7 @@ class _ListWishlistState extends State<ListWishlist> {
           );
         return Container(
           width: double.infinity,
-          height: 850,
+          height: MediaQuery.of(context).size.height * 0.7,
           alignment: Alignment.center,
           padding: EdgeInsets.only(bottom: 150),
           child: MediaQuery.removePadding(
@@ -120,6 +120,7 @@ class _ListWishlistState extends State<ListWishlist> {
                     Container(
                       width: 100,
                       height: 150,
+                      margin: EdgeInsets.only(right: 10),
                       child: Image.asset(item.images[0]),
                     ),
                     Column(
@@ -139,7 +140,7 @@ class _ListWishlistState extends State<ListWishlist> {
                             height: 10,
                           ),
                           Text(
-                            "đ" + moneyFormater.format(item.price).toString(),
+                            moneyFormater.format(item.price).toString(),
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.w500),

@@ -112,8 +112,6 @@ flutter:
   - assets/data/
   - assets/product/1-53/
   - assets/product/54-130/
-  - assets/product/131-170/
-  - assets/product/171-215/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

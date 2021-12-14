@@ -33,12 +33,12 @@ class Address {
 List<Address> addresses = [
   new Address(
       id: 1,
-      name: "Dương Công Vũ",
-      phone: "09121331",
+      name: "Đinh Thị Thanh Thảo",
+      phone: "0349424977",
       address: "Hoàng Diệu 2, Linh Trung, Thủ Đức, TPHCM"),
   new Address(
       id: 2,
-      name: "Nguyễn Dương Thục Anh",
+      name: "Thanh thảo",
       phone: "099912228",
       address: "Hoàng Hoa Thám, Gia Ray, Xuân Lộc, Đồng Nai"),
 ];
@@ -299,7 +299,7 @@ class _ShippingMethodSelectState extends State<ShippingMethodSelect> {
                                               : Theme.of(context).canvasColor),
                                     ),
                                     Text(
-                                      "đ" + moneyFormater.format(item.fee),
+                                      moneyFormater.format(item.fee),
                                       style: TextStyle(
                                           color: isActive
                                               ? Theme.of(context).primaryColor

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TextFieldWidget extends StatelessWidget {
+class TextFieldWidget extends StatefulWidget {
   final IconData icon;
   final String? hint;
   final String? errorText;
@@ -18,42 +18,7 @@ class TextFieldWidget extends StatelessWidget {
   final TextInputAction? inputAction;
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Colors.white),
-        child: Padding(
-          padding: padding,
-          child: TextFormField(
-            controller: textController,
-            focusNode: focusNode,
-            onFieldSubmitted: onFieldSubmitted,
-            onChanged: onChanged,
-            autofocus: autoFocus,
-            textInputAction: inputAction,
-            obscureText: this.isObscure,
-            maxLength: 25,
-            keyboardType: this.inputType,
-            style: Theme.of(context).textTheme.bodyText1,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(0),
-                hintText: this.hint,
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: hintColor),
-                counterText: '',
-                icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
-          ),
-        ),
-      ),
-    );
-  }
+  State<TextFieldWidget> createState() => _TextFieldWidgetState();
 
   const TextFieldWidget({
     Key? key,
@@ -73,4 +38,70 @@ class TextFieldWidget extends StatelessWidget {
     this.autoFocus = false,
     this.inputAction,
   }) : super(key: key);
+}
+
+class _TextFieldWidgetState extends State<TextFieldWidget> {
+  late bool isHide;
+
+  @override
+  void initState() {
+    super.initState();
+    isHide = widget.isObscure == true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white),
+        child: Padding(
+          padding: widget.padding,
+          child: TextFormField(
+            controller: widget.textController,
+            focusNode: widget.focusNode,
+            onFieldSubmitted: widget.onFieldSubmitted,
+            onChanged: widget.onChanged,
+            autofocus: widget.autoFocus,
+            textInputAction: widget.inputAction,
+            obscureText: isHide,
+            maxLength: 100,
+            keyboardType: this.widget.inputType,
+            style: Theme.of(context).textTheme.bodyText1,
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(0),
+                hintText: this.widget.hint,
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: widget.hintColor),
+                counterText: '',
+                icon: this.widget.isIcon
+                    ? Icon(this.widget.icon, color: widget.iconColor)
+                    : null,
+                suffix: widget.isObscure
+                    ? InkWell(
+                        onTap: () {
+                          setState(() {
+                            isHide = !isHide;
+                          });
+                        },
+                        child: Icon(
+                          isHide
+                              ? Icons.remove_red_eye_sharp
+                              : Icons.visibility_off,
+                          size: 20,
+                          color: Theme.of(context).canvasColor,
+                        ),
+                      )
+                    : null),
+          ),
+        ),
+      ),
+    );
+  }
 }

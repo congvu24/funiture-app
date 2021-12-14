@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 Spacer(),
                 Text(
-                  "Buy Your Best \n Furniture",
+                  "Thế Giới Nội Thất",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
@@ -68,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
-                    "Beautifully furniture collection comprising chairs, stools, and tables.",
+                    "Hàng ngàn sản phẩm nội thất phù hợp cho căn phòng của bạn.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white.withOpacity(0.6),
@@ -91,12 +91,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   navigate() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+    Navigator.of(context).pushReplacementNamed(Routes.home);
 
-    if (preferences.getBool(Preferences.is_logged_in) ?? false) {
-      Navigator.of(context).pushReplacementNamed(Routes.home);
-    } else {
-      Navigator.of(context).pushReplacementNamed(Routes.login);
-    }
+    // SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    // if (preferences.getBool(Preferences.is_logged_in) ?? false) {
+    //   Navigator.of(context).pushReplacementNamed(Routes.home);
+    // } else {
+    //   Navigator.of(context).pushReplacementNamed(Routes.login);
+    // }
   }
 }

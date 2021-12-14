@@ -123,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextFieldWidget(
                       icon: Icons.mail,
                       errorText: "Không hợp lệ",
-                      hint: "Username",
+                      hint: "Tên đăng nhập",
                       textController: _userEmailController),
                   SizedBox(
                     height: 30,
@@ -132,6 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       icon: Icons.lock,
                       errorText: "Không hợp lệ",
                       hint: "Mật khẩu",
+                      isObscure: true,
                       textController: _passwordController),
                   SizedBox(
                     height: 60,

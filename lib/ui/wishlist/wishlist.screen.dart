@@ -14,6 +14,9 @@ class Wishlist extends StatelessWidget {
   Widget build(BuildContext context) {
     return BodyScaffold(
       children: [
+        SizedBox(
+          height: 10,
+        ),
         Center(
           child: Text(
             "Theo dõi",

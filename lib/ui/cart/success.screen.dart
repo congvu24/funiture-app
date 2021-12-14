@@ -60,7 +60,7 @@ class SuccessScreen extends StatelessWidget {
                             fontWeight: FontWeight.w700),
                       ),
                       Text(
-                        "10 ngày",
+                        "1-2 ngày",
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.white,
