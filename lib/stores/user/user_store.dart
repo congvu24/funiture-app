@@ -8,13 +8,7 @@ import '../form/form_store.dart';
 
 part 'user_store.g.dart';
 
-Profile defaultProfile = new Profile(
-    name: "Thanh Thảo",
-    phone: "0349424977",
-    address: "Gò Vấp, TP.HCM",
-    email: "dinhthao0112@gmail.com",
-    username: "dinhthao0112",
-    password: "thao0112");
+Profile defaultProfile = new Profile(name: "Công Vũ", phone: "0349424977", address: "Gò Vấp, TP.HCM", email: "1", username: "1", password: "1");
 
 class UserStore = _UserStore with _$UserStore;
 
@@ -52,8 +46,7 @@ abstract class _UserStore with Store {
   }
 
   // empty responses:-----------------------------------------------------------
-  static ObservableFuture<bool> emptyLoginResponse =
-      ObservableFuture.value(false);
+  static ObservableFuture<bool> emptyLoginResponse = ObservableFuture.value(false);
 
   // store variables:-----------------------------------------------------------
   @observable
@@ -93,8 +86,7 @@ abstract class _UserStore with Store {
   }
 
   addWishlist(Product product) {
-    if (wishlist.indexWhere((element) => product.id == element.id) == -1)
-      wishlist.add(product);
+    if (wishlist.indexWhere((element) => product.id == element.id) == -1) wishlist.add(product);
   }
 
   removeFromWishlist(Product product) {

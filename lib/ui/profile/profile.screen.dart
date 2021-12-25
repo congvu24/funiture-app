@@ -51,15 +51,11 @@ class _ProfileState extends State<Profile> {
                 ),
                 InkWell(
                     onTap: () {
-                      Navigator.of(context, rootNavigator: true)
-                          .pushReplacementNamed(Routes.login);
+                      Navigator.of(context, rootNavigator: true).pushReplacementNamed(Routes.login);
                     },
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: Theme.of(context).primaryColor),
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20)), color: Theme.of(context).primaryColor),
                       child: Text(
                         "Đăng nhập / Đăng ký",
                         style: TextStyle(
@@ -80,7 +76,7 @@ class _ProfileState extends State<Profile> {
                 radius: 28,
                 backgroundColor: Theme.of(context).primaryColor,
                 child: const Text(
-                  'T',
+                  'V',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -88,6 +84,7 @@ class _ProfileState extends State<Profile> {
                 width: 10,
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     _userStore.profile.name,
@@ -95,10 +92,7 @@ class _ProfileState extends State<Profile> {
                   ),
                   Text(
                     _userStore.profile.phone,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).canvasColor),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Theme.of(context).canvasColor),
                   )
                 ],
               )
@@ -136,9 +130,7 @@ class _ProfileState extends State<Profile> {
         Container(
           height: 70,
           width: double.infinity,
-          decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              borderRadius: BorderRadius.all(Radius.circular(10))),
+          decoration: BoxDecoration(color: Theme.of(context).canvasColor, borderRadius: BorderRadius.all(Radius.circular(10))),
         ),
         SizedBox(
           height: 30,
@@ -183,9 +175,7 @@ class _ProfileState extends State<Profile> {
         Container(
           height: 70,
           width: double.infinity,
-          decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              borderRadius: BorderRadius.all(Radius.circular(10))),
+          decoration: BoxDecoration(color: Theme.of(context).canvasColor, borderRadius: BorderRadius.all(Radius.circular(10))),
         ),
         SizedBox(
           height: 100,
@@ -197,20 +187,16 @@ class _ProfileState extends State<Profile> {
               InkWell(
                 onTap: () {
                   _userStore.logout();
-                  Navigator.of(context, rootNavigator: true)
-                      .pushReplacementNamed(Routes.login);
+                  Navigator.of(context, rootNavigator: true).pushReplacementNamed(Routes.login);
                 },
                 child: Container(
                   alignment: Alignment.center,
                   width: 200,
                   padding: EdgeInsets.symmetric(vertical: 18, horizontal: 40),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(color: Theme.of(context).canvasColor)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), border: Border.all(color: Theme.of(context).canvasColor)),
                   child: Text(
                     "Đăng xuất",
-                    style: TextStyle(
-                        color: Theme.of(context).canvasColor, fontSize: 18),
+                    style: TextStyle(color: Theme.of(context).canvasColor, fontSize: 18),
                   ),
                 ),
               ),
